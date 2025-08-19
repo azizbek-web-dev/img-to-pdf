@@ -144,8 +144,21 @@ class TelegramBotController extends Controller
                 return;
             }
             
+            // Rasm ma'lumotlarini tayyorlaymiz
+            $imageData = [];
+            foreach ($images as $image) {
+                $fullPath = storage_path('app/public/' . $image);
+                if (file_exists($fullPath)) {
+                    $imageData[] = [
+                        'path' => $image,
+                        'base64' => base64_encode(file_get_contents($fullPath)),
+                        'type' => pathinfo($fullPath, PATHINFO_EXTENSION)
+                    ];
+                }
+            }
+            
             $pdf = PDF::loadView('pdf.images', [
-                'images' => $images,
+                'images' => $imageData,
                 'chatId' => $chatId
             ]);
             

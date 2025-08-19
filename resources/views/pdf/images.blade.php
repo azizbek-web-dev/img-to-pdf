@@ -44,7 +44,11 @@
     @foreach($images as $index => $image)
         <div class="image-container">
             <div class="image-number">Rasm {{ $index + 1 }}</div>
-            <img src="{{ Storage::disk('public')->url($image) }}" alt="Rasm {{ $index + 1 }}">
+            @if(isset($image['base64']))
+                <img src="data:image/{{ $image['type'] }};base64,{{ $image['base64'] }}" alt="Rasm {{ $index + 1 }}">
+            @else
+                <p style="color: red;">Rasm yuklanmadi: {{ $image['path'] ?? 'Noma\'lum' }}</p>
+            @endif
         </div>
     @endforeach
 
