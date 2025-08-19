@@ -50,11 +50,19 @@ class TelegramBotController extends Controller
                 
                 // Start yoki boshqa xabar
                 if ($text === '/start' || $text === 'start') {
-                    $welcomeMessage = "🤖 Xush kelibsiz! Rasm to PDF konverter bot.\n\n📸 Rasm yuklang, keyin 'Tayyor' deb yozing.";
-                    $this->sendMessage($chatId, $welcomeMessage);
+                    $this->sendWelcomeMessage($chatId);
                     Log::info('Welcome message sent', ['chat_id' => $chatId]);
+                } elseif ($text === '📖 Bot haqida') {
+                    $this->sendAboutMessage($chatId);
+                    Log::info('About message sent', ['chat_id' => $chatId]);
+                } elseif ($text === '📋 Ishlatish tartibi') {
+                    $this->sendUsageMessage($chatId);
+                    Log::info('Usage message sent', ['chat_id' => $chatId]);
+                } elseif ($text === '🔄 Yangi rasm') {
+                    $this->sendNewImageMessage($chatId);
+                    Log::info('New image message sent', ['chat_id' => $chatId]);
                 } else {
-                    $this->sendMessage($chatId, "Rasm yuklang yoki 'Tayyor' deb yozing");
+                    $this->sendDefaultMessage($chatId);
                     Log::info('Default message sent', ['chat_id' => $chatId]);
                 }
             }
@@ -71,6 +79,81 @@ class TelegramBotController extends Controller
             
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
+    }
+    
+    private function sendWelcomeMessage($chatId)
+    {
+        $message = "🤖 *IMG TO PDF Bot* ga xush kelibsiz!\n\n";
+        $message .= "📸 Rasm yuklang va PDF yarating\n";
+        $message .= "💡 Quyidagi tugmalardan foydalaning:";
+        
+        $keyboard = [
+            ['📖 Bot haqida', '📋 Ishlatish tartibi'],
+            ['🔄 Yangi rasm']
+        ];
+        
+        $this->sendMessageWithKeyboard($chatId, $message, $keyboard);
+    }
+    
+    private function sendAboutMessage($chatId)
+    {
+        $message = "📖 *Bot haqida*\n\n";
+        $message .= "🤖 **IMG TO PDF Bot**\n";
+        $message .= "📱 Telegram orqali rasmni PDF ga o'tkazish\n";
+        $message .= "⚡ Tez va qulay ishlash\n";
+        $message .= "🔒 Xavfsiz va ishonchli\n";
+        $message .= "💾 Avtomatik fayllarni tozalash\n\n";
+        $message .= "🛠️ Laravel + DomPDF yordamida yaratildi";
+        
+        $keyboard = [
+            ['📋 Ishlatish tartibi', '🔄 Yangi rasm'],
+            ['🏠 Bosh sahifa']
+        ];
+        
+        $this->sendMessageWithKeyboard($chatId, $message, $keyboard);
+    }
+    
+    private function sendUsageMessage($chatId)
+    {
+        $message = "📋 *Ishlatish tartibi*\n\n";
+        $message .= "1️⃣ **Rasm yuklang** - Botga rasm yuboring\n";
+        $message .= "2️⃣ **Tayyor tugmasini bosing** - PDF yaratish uchun\n";
+        $message .= "3️⃣ **PDF oling** - Bot sizga PDF fayl yuboradi\n";
+        $message .= "4️⃣ **Avtomatik tozalash** - Fayllar o'chiriladi\n\n";
+        $message .= "💡 Bir necha rasm yuklab, hammasini bir PDF da olishingiz mumkin!";
+        
+        $keyboard = [
+            ['🔄 Yangi rasm', '📖 Bot haqida'],
+            ['🏠 Bosh sahifa']
+        ];
+        
+        $this->sendMessageWithKeyboard($chatId, $message, $keyboard);
+    }
+    
+    private function sendNewImageMessage($chatId)
+    {
+        $message = "🔄 **Yangi rasm yuklash**\n\n";
+        $message .= "📸 Endi botga rasm yuboring\n";
+        $message .= "💡 Bir necha rasm yuklashingiz mumkin\n";
+        $message .= "✅ Rasm yuklangandan keyin 'Tayyor' tugmasi paydo bo'ladi";
+        
+        $keyboard = [
+            ['📖 Bot haqida', '📋 Ishlatish tartibi']
+        ];
+        
+        $this->sendMessageWithKeyboard($chatId, $message, $keyboard);
+    }
+    
+    private function sendDefaultMessage($chatId)
+    {
+        $message = "💡 Quyidagi tugmalardan foydalaning yoki rasm yuklang:";
+        
+        $keyboard = [
+            ['📖 Bot haqida', '📋 Ishlatish tartibi'],
+            ['🔄 Yangi rasm']
+        ];
+        
+        $this->sendMessageWithKeyboard($chatId, $message, $keyboard);
     }
     
     private function saveImage($photos, $chatId)
@@ -105,7 +188,18 @@ class TelegramBotController extends Controller
                     'file_size' => strlen($imageContent)
                 ]);
                 
-                $this->sendMessage($chatId, "✅ Rasm saqlandi! 'Tayyor' tugmasini bosib PDF yarating");
+                // Rasm yuklangandan keyin tugmalar bilan xabar yuboramiz
+                $message = "✅ *Rasm saqlandi!*\n\n";
+                $message .= "📸 Rasm soni: " . count(Storage::disk('public')->files('images/' . $chatId)) . "\n";
+                $message .= "💡 Endi 'Tayyor' tugmasini bosib PDF yarating yoki yana rasm yuklang";
+                
+                $keyboard = [
+                    ['✅ Tayyor', '📸 Yana rasm'],
+                    ['📖 Bot haqida', '📋 Ishlatish tartibi']
+                ];
+                
+                $this->sendMessageWithKeyboard($chatId, $message, $keyboard);
+                
             } else {
                 Log::error('Failed to get file info', [
                     'chat_id' => $chatId,
@@ -179,7 +273,18 @@ class TelegramBotController extends Controller
             
             Log::info('Files cleaned up', ['chat_id' => $chatId]);
             
-            $this->sendMessage($chatId, "✅ PDF tayyor! Rasm va PDF fayllar tozalandi");
+            // PDF yaratilgandan keyin yangi tugmalar
+            $message = "🎉 *PDF tayyor!*\n\n";
+            $message .= "📄 PDF fayl yuborildi\n";
+            $message .= "🧹 Fayllar tozalandi\n\n";
+            $message .= "🔄 Yangi PDF yaratish uchun rasm yuklang";
+            
+            $keyboard = [
+                ['🔄 Yangi rasm', '📖 Bot haqida'],
+                ['📋 Ishlatish tartibi']
+            ];
+            
+            $this->sendMessageWithKeyboard($chatId, $message, $keyboard);
             
         } catch (\Exception $e) {
             Log::error('PDF generation error', [
@@ -193,6 +298,46 @@ class TelegramBotController extends Controller
         }
     }
     
+    private function sendMessageWithKeyboard($chatId, $text, $keyboard)
+    {
+        try {
+            $token = env('TELEGRAM_BOT_TOKEN');
+            $url = "https://api.telegram.org/bot{$token}/sendMessage";
+            
+            $data = [
+                'chat_id' => $chatId,
+                'text' => $text,
+                'parse_mode' => 'Markdown',
+                'reply_markup' => json_encode([
+                    'keyboard' => $keyboard,
+                    'resize_keyboard' => true,
+                    'one_time_keyboard' => false
+                ])
+            ];
+            
+            $response = $this->makeTelegramRequest($url, $data);
+            $responseData = json_decode($response, true);
+            
+            if ($responseData['ok']) {
+                Log::info('Message with keyboard sent successfully', [
+                    'chat_id' => $chatId,
+                    'message_id' => $responseData['result']['message_id'] ?? null
+                ]);
+            } else {
+                Log::error('Failed to send message with keyboard', [
+                    'chat_id' => $chatId,
+                    'response' => $responseData
+                ]);
+            }
+            
+        } catch (\Exception $e) {
+            Log::error('Send message with keyboard error', [
+                'chat_id' => $chatId,
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+    
     private function sendMessage($chatId, $text)
     {
         try {
@@ -201,7 +346,8 @@ class TelegramBotController extends Controller
             
             $data = [
                 'chat_id' => $chatId,
-                'text' => $text
+                'text' => $text,
+                'parse_mode' => 'Markdown'
             ];
             
             $response = $this->makeTelegramRequest($url, $data);

@@ -7,53 +7,60 @@
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            background: white;
         }
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
+        .page {
+            page-break-after: always;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .page:last-child {
+            page-break-after: avoid;
         }
         .image-container {
-            margin-bottom: 30px;
             text-align: center;
+            max-width: 95%;
+            max-height: 95%;
         }
         .image-container img {
             max-width: 100%;
-            height: auto;
-            border: 1px solid #ddd;
-        }
-        .image-number {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 10px;
+            max-height: 100%;
+            object-fit: contain;
         }
         .footer {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            right: 0;
             text-align: center;
-            margin-top: 40px;
-            color: #666;
+            color: #999;
+            font-size: 12px;
+            font-style: italic;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Rasmlar PDF</h1>
-        <p>Jami: {{ count($images) }} ta rasm</p>
-        <p>Vaqt: {{ now()->format('d.m.Y H:i:s') }}</p>
-    </div>
-
     @foreach($images as $index => $image)
-        <div class="image-container">
-            <div class="image-number">Rasm {{ $index + 1 }}</div>
-            @if(isset($image['base64']))
-                <img src="data:image/{{ $image['type'] }};base64,{{ $image['base64'] }}" alt="Rasm {{ $index + 1 }}">
-            @else
-                <p style="color: red;">Rasm yuklanmadi: {{ $image['path'] ?? 'Noma\'lum' }}</p>
+        <div class="page">
+            <div class="image-container">
+                @if(isset($image['base64']))
+                    <img src="data:image/{{ $image['type'] }};base64,{{ $image['base64'] }}" alt="Rasm {{ $index + 1 }}">
+                @else
+                    <div style="color: red; padding: 50px;">Rasm yuklanmadi</div>
+                @endif
+            </div>
+            
+            @if($index === count($images) - 1)
+                <div class="footer">
+                    Laravel va DomPDF yordamida yaratildi
+                </div>
             @endif
         </div>
     @endforeach
-
-    <div class="footer">
-        <p>Laravel va DomPDF yordamida yaratildi</p>
-    </div>
 </body>
 </html>
