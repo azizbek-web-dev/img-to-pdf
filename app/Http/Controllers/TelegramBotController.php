@@ -22,6 +22,36 @@ class TelegramBotController extends Controller
                 'user_agent' => $request->userAgent()
             ]);
             
+            // Callback query ni tekshiramiz (inline keyboard tugmalar uchun)
+            if (isset($update['callback_query'])) {
+                $callbackQuery = $update['callback_query'];
+                $chatId = $callbackQuery['message']['chat']['id'];
+                $data = $callbackQuery['data'];
+                
+                Log::info('Callback query received', [
+                    'chat_id' => $chatId,
+                    'data' => $data
+                ]);
+                
+                if ($data === 'tayyor') {
+                    Log::info('Tayyor button clicked via callback', ['chat_id' => $chatId]);
+                    $this->generatePdfFromImages($chatId);
+                    return response()->json(['status' => 'success']);
+                } elseif ($data === 'yangi_rasm') {
+                    $this->sendNewImageMessage($chatId);
+                } elseif ($data === 'bot_haqida') {
+                    $this->sendAboutMessage($chatId);
+                } elseif ($data === 'ishlatish_tartibi') {
+                    $this->sendUsageMessage($chatId);
+                } elseif ($data === 'bosh_sahifa') {
+                    $this->sendWelcomeMessage($chatId);
+                } elseif ($data === 'yana_rasm') {
+                    $this->sendNewImageMessage($chatId);
+                }
+                
+                return response()->json(['status' => 'success']);
+            }
+            
             if (isset($update['message'])) {
                 $message = $update['message'];
                 $chatId = $message['chat']['id'];
@@ -36,7 +66,7 @@ class TelegramBotController extends Controller
                     'message_type' => isset($message['photo']) ? 'photo' : 'text'
                 ]);
                 
-                if ($text === 'Tayyor') {
+                if ($text === 'Tayyor' || $text === '✅ Tayyor') {
                     Log::info('Generating PDF for user', ['chat_id' => $chatId]);
                     $this->generatePdfFromImages($chatId);
                     return response()->json(['status' => 'success']);
@@ -88,11 +118,16 @@ class TelegramBotController extends Controller
         $message .= "💡 Quyidagi tugmalardan foydalaning:";
         
         $keyboard = [
-            ['📖 Bot haqida', '📋 Ishlatish tartibi'],
-            ['🔄 Yangi rasm']
+            [
+                ['text' => '📖 Bot haqida', 'callback_data' => 'bot_haqida'],
+                ['text' => '📋 Ishlatish tartibi', 'callback_data' => 'ishlatish_tartibi']
+            ],
+            [
+                ['text' => '🔄 Yangi rasm', 'callback_data' => 'yangi_rasm']
+            ]
         ];
         
-        $this->sendMessageWithKeyboard($chatId, $message, $keyboard);
+        $this->sendMessageWithInlineKeyboard($chatId, $message, $keyboard);
     }
     
     private function sendAboutMessage($chatId)
@@ -106,11 +141,16 @@ class TelegramBotController extends Controller
         $message .= "🛠️ Laravel + DomPDF yordamida yaratildi";
         
         $keyboard = [
-            ['📋 Ishlatish tartibi', '🔄 Yangi rasm'],
-            ['🏠 Bosh sahifa']
+            [
+                ['text' => '📋 Ishlatish tartibi', 'callback_data' => 'ishlatish_tartibi'],
+                ['text' => '🔄 Yangi rasm', 'callback_data' => 'yangi_rasm']
+            ],
+            [
+                ['text' => '🏠 Bosh sahifa', 'callback_data' => 'bosh_sahifa']
+            ]
         ];
         
-        $this->sendMessageWithKeyboard($chatId, $message, $keyboard);
+        $this->sendMessageWithInlineKeyboard($chatId, $message, $keyboard);
     }
     
     private function sendUsageMessage($chatId)
@@ -123,11 +163,16 @@ class TelegramBotController extends Controller
         $message .= "💡 Bir necha rasm yuklab, hammasini bir PDF da olishingiz mumkin!";
         
         $keyboard = [
-            ['🔄 Yangi rasm', '📖 Bot haqida'],
-            ['🏠 Bosh sahifa']
+            [
+                ['text' => '🔄 Yangi rasm', 'callback_data' => 'yangi_rasm'],
+                ['text' => '📖 Bot haqida', 'callback_data' => 'bot_haqida']
+            ],
+            [
+                ['text' => '🏠 Bosh sahifa', 'callback_data' => 'bosh_sahifa']
+            ]
         ];
         
-        $this->sendMessageWithKeyboard($chatId, $message, $keyboard);
+        $this->sendMessageWithInlineKeyboard($chatId, $message, $keyboard);
     }
     
     private function sendNewImageMessage($chatId)
@@ -138,10 +183,13 @@ class TelegramBotController extends Controller
         $message .= "✅ Rasm yuklangandan keyin 'Tayyor' tugmasi paydo bo'ladi";
         
         $keyboard = [
-            ['📖 Bot haqida', '📋 Ishlatish tartibi']
+            [
+                ['text' => '📖 Bot haqida', 'callback_data' => 'bot_haqida'],
+                ['text' => '📋 Ishlatish tartibi', 'callback_data' => 'ishlatish_tartibi']
+            ]
         ];
         
-        $this->sendMessageWithKeyboard($chatId, $message, $keyboard);
+        $this->sendMessageWithInlineKeyboard($chatId, $message, $keyboard);
     }
     
     private function sendDefaultMessage($chatId)
@@ -149,11 +197,16 @@ class TelegramBotController extends Controller
         $message = "💡 Quyidagi tugmalardan foydalaning yoki rasm yuklang:";
         
         $keyboard = [
-            ['📖 Bot haqida', '📋 Ishlatish tartibi'],
-            ['🔄 Yangi rasm']
+            [
+                ['text' => '📖 Bot haqida', 'callback_data' => 'bot_haqida'],
+                ['text' => '📋 Ishlatish tartibi', 'callback_data' => 'ishlatish_tartibi']
+            ],
+            [
+                ['text' => '🔄 Yangi rasm', 'callback_data' => 'yangi_rasm']
+            ]
         ];
         
-        $this->sendMessageWithKeyboard($chatId, $message, $keyboard);
+        $this->sendMessageWithInlineKeyboard($chatId, $message, $keyboard);
     }
     
     private function saveImage($photos, $chatId)
@@ -194,11 +247,17 @@ class TelegramBotController extends Controller
                 $message .= "💡 Endi 'Tayyor' tugmasini bosib PDF yarating yoki yana rasm yuklang";
                 
                 $keyboard = [
-                    ['✅ Tayyor', '📸 Yana rasm'],
-                    ['📖 Bot haqida', '📋 Ishlatish tartibi']
+                    [
+                        ['text' => '✅ Tayyor', 'callback_data' => 'tayyor'],
+                        ['text' => '📸 Yana rasm', 'callback_data' => 'yana_rasm']
+                    ],
+                    [
+                        ['text' => '📖 Bot haqida', 'callback_data' => 'bot_haqida'],
+                        ['text' => '📋 Ishlatish tartibi', 'callback_data' => 'ishlatish_tartibi']
+                    ]
                 ];
                 
-                $this->sendMessageWithKeyboard($chatId, $message, $keyboard);
+                $this->sendMessageWithInlineKeyboard($chatId, $message, $keyboard);
                 
             } else {
                 Log::error('Failed to get file info', [
@@ -280,11 +339,16 @@ class TelegramBotController extends Controller
             $message .= "🔄 Yangi PDF yaratish uchun rasm yuklang";
             
             $keyboard = [
-                ['🔄 Yangi rasm', '📖 Bot haqida'],
-                ['📋 Ishlatish tartibi']
+                [
+                    ['text' => '🔄 Yangi rasm', 'callback_data' => 'yangi_rasm'],
+                    ['text' => '📖 Bot haqida', 'callback_data' => 'bot_haqida']
+                ],
+                [
+                    ['text' => '📋 Ishlatish tartibi', 'callback_data' => 'ishlatish_tartibi']
+                ]
             ];
             
-            $this->sendMessageWithKeyboard($chatId, $message, $keyboard);
+            $this->sendMessageWithInlineKeyboard($chatId, $message, $keyboard);
             
         } catch (\Exception $e) {
             Log::error('PDF generation error', [
@@ -332,6 +396,44 @@ class TelegramBotController extends Controller
             
         } catch (\Exception $e) {
             Log::error('Send message with keyboard error', [
+                'chat_id' => $chatId,
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+    
+    private function sendMessageWithInlineKeyboard($chatId, $text, $keyboard)
+    {
+        try {
+            $token = env('TELEGRAM_BOT_TOKEN');
+            $url = "https://api.telegram.org/bot{$token}/sendMessage";
+            
+            $data = [
+                'chat_id' => $chatId,
+                'text' => $text,
+                'parse_mode' => 'Markdown',
+                'reply_markup' => json_encode([
+                    'inline_keyboard' => $keyboard
+                ])
+            ];
+            
+            $response = $this->makeTelegramRequest($url, $data);
+            $responseData = json_decode($response, true);
+            
+            if ($responseData['ok']) {
+                Log::info('Message with inline keyboard sent successfully', [
+                    'chat_id' => $chatId,
+                    'message_id' => $responseData['result']['message_id'] ?? null
+                ]);
+            } else {
+                Log::error('Failed to send message with inline keyboard', [
+                    'chat_id' => $chatId,
+                    'response' => $responseData
+                ]);
+            }
+            
+        } catch (\Exception $e) {
+            Log::error('Send message with inline keyboard error', [
                 'chat_id' => $chatId,
                 'error' => $e->getMessage()
             ]);
