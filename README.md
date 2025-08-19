@@ -1,61 +1,217 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🤖 IMG TO PDF Bot
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Telegram orqali rasmni PDF ga o'tkazish uchun yaratilgan bot. Laravel va DomPDF yordamida qurilgan.
 
-## About Laravel
+## ✨ Xususiyatlar
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- 📸 **Rasm yuklash** - Bir yoki bir necha rasm
+- 📄 **PDF yaratish** - Chiroyli va tuzilgan PDF
+- 🎯 **Inline Keyboard** - Qulay tugmalar bilan
+- 🧹 **Avtomatik tozalash** - Fayllar avtomatik o'chiriladi
+- 📱 **Telegram Bot API** - Real-time ishlash
+- 🔒 **Xavfsizlik** - HTTPS va webhook
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🚀 O'rnatish
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Talablar
+- PHP 8.2+
+- Laravel 12.0+
+- Composer
+- HTTPS domain (webhook uchun)
+- Telegram Bot Token
 
-## Learning Laravel
+### 1. Loyihani klonlash
+```bash
+git clone <repository-url>
+cd img-to-pdf/laravel
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 2. Dependencelarni o'rnatish
+```bash
+composer install
+npm install
+npm run build
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### 3. .env faylini sozlash
+```env
+APP_NAME="IMG TO PDF Bot"
+APP_ENV=production
+APP_KEY=base64:your_key_here
+APP_DEBUG=false
+APP_URL=https://your-domain.com
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+LOG_CHANNEL=stack
+LOG_LEVEL=error
 
-## Laravel Sponsors
+DB_CONNECTION=sqlite
+DB_DATABASE=database/database.sqlite
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+FILESYSTEM_DISK=public
 
-### Premium Partners
+# Telegram Bot
+TELEGRAM_BOT_TOKEN=your_bot_token_here
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 4. Laravel sozlamalari
+```bash
+php artisan key:generate
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+php artisan storage:link
+```
 
-## Contributing
+### 5. Server sozlamalari
+```bash
+# Nginx yoki Apache sozlang
+# HTTPS sertifikat o'rnating
+# Webhook URL ni sozlang
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🤖 Telegram Bot yaratish
 
-## Code of Conduct
+### 1. @BotFather da bot yarating
+```
+/newbot
+Bot nomi: IMG TO PDF Bot
+Bot username: img_to_pdf_bot
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 2. Webhook o'rnating
+```
+https://api.telegram.org/botYOUR_TOKEN/setWebhook?url=https://your-domain.com/api/telegram/webhook
+```
 
-## Security Vulnerabilities
+## 📱 Bot ishlatish
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Asosiy funksiyalar
+1. **Rasm yuklang** - Botga rasm yuboring
+2. **Tayyor tugmasini bosing** - PDF yaratish uchun
+3. **PDF oling** - Bot sizga PDF fayl yuboradi
+4. **Avtomatik tozalash** - Fayllar o'chiriladi
 
-## License
+### Tugmalar
+- 📖 **Bot haqida** - Bot haqida ma'lumot
+- 📋 **Ishlatish tartibi** - Qanday ishlatish
+- 🔄 **Yangi rasm** - Yangi rasm yuklash
+- ✅ **Tayyor** - PDF yaratish
+- 🏠 **Bosh sahifa** - Asosiy menyu
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 🏗️ Loyiha tuzilishi
+
+```
+laravel/
+├── app/Http/Controllers/
+│   └── TelegramBotController.php    # Bot asosiy logikasi
+├── resources/views/
+│   └── pdf/
+│       └── images.blade.php         # PDF template
+├── routes/
+│   └── web.php                      # Webhook route
+├── bootstrap/
+│   └── app.php                      # Middleware sozlamalari
+└── README.md                         # Ushbu fayl
+```
+
+## 🔧 API Endpointlar
+
+- `POST /api/telegram/webhook` - Telegram webhook endpoint
+
+## 🛠️ Texnik ma'lumotlar
+
+### Paketlar
+- `barryvdh/laravel-dompdf` - PDF yaratish
+- Laravel Storage - Fayllarni boshqarish
+- Telegram Bot API - Bot funksiyalari
+
+### Fayl tuzilishi
+- Rasm: `storage/app/public/images/{chat_id}/`
+- PDF: `storage/app/public/pdfs/{chat_id}/`
+
+### Xavfsizlik
+- HTTPS majburiy
+- Bot tokenini himoya qiling
+- Webhook URL ni faqat o'zingiz bilgan holda saqlang
+
+## 🧪 Test qilish
+
+1. Botga `/start` yuboring
+2. Rasm yuklang
+3. "Tayyor" tugmasini bosing
+4. PDF fayl oling
+
+## 📊 Log va monitoring
+
+Barcha bot faoliyati `storage/logs/laravel.log` faylida saqlanadi:
+- Webhook qabul qilindi
+- Rasm yuklandi
+- PDF yaratildi
+- Xatoliklar
+
+## 🐛 Muammolarni hal qilish
+
+### Bot javob bermaydi
+- Webhook to'g'ri o'rnatilganini tekshiring
+- HTTPS domain ishlatayotganingizni tekshiring
+- Bot token to'g'ri ekanligini tekshiring
+
+### PDF yaratilmaydi
+- Storage link yaratilganini tekshiring
+- DomPDF paketi o'rnatilganini tekshiring
+- Rasm fayllar saqlanganini tekshiring
+
+### Fayllar saqlanmaydi
+- Storage disk public ga ulanganini tekshiring
+- Fayl huquqlarini tekshiring
+
+## 📞 Yordam
+
+Muammolar bo'lsa:
+1. Laravel log fayllarini tekshiring
+2. Telegram Bot API xatoliklarini tekshiring
+3. Server sozlamalarini tekshiring
+
+## 👨‍💻 Muallif
+
+**Azizbek Hakimov** ([@azizbek-web-dev](https://github.com/azizbek-web-dev))
+
+- 🌐 Telegram: [@azizbek_web_dev](https://t.me/azizbek_web_dev)
+- 💻 GitHub: [azizbek-web-dev](https://github.com/azizbek-web-dev)
+- 📧 Email: azizbek.web.dev@gmail.com
+
+## 📄 Litsenziya
+
+Bu loyiha [MIT License](LICENSE) ostida tarqatiladi.
+
+```
+MIT License
+
+Copyright (c) 2025 Azizbek Hakimov
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+## 🌟 Yordam berish
+
+Agar bu loyiha foydali bo'lsa, ⭐ yulduzcha qo'yishni unutmang!
+
+---
+
+**Eslatma:** Bu bot faqat o'quv maqsadida yaratilgan. Production da ishlatishdan oldin xavfsizlik sozlamalarini tekshiring.
