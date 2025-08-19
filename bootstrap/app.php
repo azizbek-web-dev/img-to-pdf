@@ -11,7 +11,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // Session middleware ni butunlay o'chirib qo'yamiz
+        $middleware->web([]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
