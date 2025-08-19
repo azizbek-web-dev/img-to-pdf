@@ -1,39 +1,39 @@
 # 🤖 IMG TO PDF Bot
 
-Telegram orqali rasmni PDF ga o'tkazish uchun yaratilgan bot. Laravel va DomPDF yordamida qurilgan.
+A Telegram bot for converting images to PDF. Built with Laravel and DomPDF.
 
-## ✨ Xususiyatlar
+## ✨ Features
 
-- 📸 **Rasm yuklash** - Bir yoki bir necha rasm
-- 📄 **PDF yaratish** - Chiroyli va tuzilgan PDF
-- 🎯 **Inline Keyboard** - Qulay tugmalar bilan
-- 🧹 **Avtomatik tozalash** - Fayllar avtomatik o'chiriladi
-- 📱 **Telegram Bot API** - Real-time ishlash
-- 🔒 **Xavfsizlik** - HTTPS va webhook
+- 📸 **Image Upload** - Single or multiple images
+- 📄 **PDF Generation** - Beautiful and organized PDFs
+- 🎯 **Inline Keyboard** - Convenient buttons
+- 🧹 **Auto Cleanup** - Files automatically deleted
+- 📱 **Telegram Bot API** - Real-time operation
+- 🔒 **Security** - HTTPS and webhook
 
-## 🚀 O'rnatish
+## 🚀 Installation
 
-### Talablar
+### Requirements
 - PHP 8.2+
 - Laravel 12.0+
 - Composer
-- HTTPS domain (webhook uchun)
+- HTTPS domain (for webhook)
 - Telegram Bot Token
 
-### 1. Loyihani klonlash
+### 1. Clone the project
 ```bash
 git clone <repository-url>
 cd img-to-pdf/laravel
 ```
 
-### 2. Dependencelarni o'rnatish
+### 2. Install dependencies
 ```bash
 composer install
 npm install
 npm run build
 ```
 
-### 3. .env faylini sozlash
+### 3. Configure .env file
 ```env
 APP_NAME="IMG TO PDF Bot"
 APP_ENV=production
@@ -53,7 +53,7 @@ FILESYSTEM_DISK=public
 TELEGRAM_BOT_TOKEN=your_bot_token_here
 ```
 
-### 4. Laravel sozlamalari
+### 4. Laravel setup
 ```bash
 php artisan key:generate
 php artisan config:cache
@@ -62,127 +62,129 @@ php artisan view:cache
 php artisan storage:link
 ```
 
-### 5. Server sozlamalari
+### 5. Server configuration
 ```bash
-# Nginx yoki Apache sozlang
-# HTTPS sertifikat o'rnating
-# Webhook URL ni sozlang
+# Configure Nginx or Apache
+# Install HTTPS certificate
+# Set webhook URL
 ```
 
-## 🤖 Telegram Bot yaratish
+## 🤖 Create Telegram Bot
 
-### 1. @BotFather da bot yarating
+### 1. Create bot with @BotFather
 ```
 /newbot
-Bot nomi: IMG TO PDF Bot
+Bot name: IMG TO PDF Bot
 Bot username: img_to_pdf_bot
 ```
 
-### 2. Webhook o'rnating
+### 2. Set webhook
 ```
 https://api.telegram.org/botYOUR_TOKEN/setWebhook?url=https://your-domain.com/api/telegram/webhook
 ```
 
-## 📱 Bot ishlatish
+## 📱 Bot Usage
 
-### Asosiy funksiyalar
-1. **Rasm yuklang** - Botga rasm yuboring
-2. **Tayyor tugmasini bosing** - PDF yaratish uchun
-3. **PDF oling** - Bot sizga PDF fayl yuboradi
-4. **Avtomatik tozalash** - Fayllar o'chiriladi
+### Main functions
+1. **Upload Image** - Send image to bot
+2. **Press Ready Button** - To create PDF
+3. **Get PDF** - Bot sends you PDF file
+4. **Auto Cleanup** - Files are deleted
 
-### Tugmalar
-- 📖 **Bot haqida** - Bot haqida ma'lumot
-- 📋 **Ishlatish tartibi** - Qanday ishlatish
-- 🔄 **Yangi rasm** - Yangi rasm yuklash
-- ✅ **Tayyor** - PDF yaratish
-- 🏠 **Bosh sahifa** - Asosiy menyu
+### Buttons
+- 📖 **About Bot** - Bot information
+- 📋 **Usage Guide** - How to use
+- 🔄 **New Image** - Upload new image
+- ✅ **Ready** - Create PDF
+- 🏠 **Home** - Main menu
 
-## 🏗️ Loyiha tuzilishi
+## 🏗️ Project Structure
 
 ```
 laravel/
 ├── app/Http/Controllers/
-│   └── TelegramBotController.php    # Bot asosiy logikasi
+│   └── TelegramBotController.php    # Main bot logic
 ├── resources/views/
+│   ├── home.blade.php               # Home page
 │   └── pdf/
 │       └── images.blade.php         # PDF template
 ├── routes/
 │   └── web.php                      # Webhook route
 ├── bootstrap/
-│   └── app.php                      # Middleware sozlamalari
-└── README.md                         # Ushbu fayl
+│   └── app.php                      # Middleware config
+└── README.md                         # This file
 ```
 
-## 🔧 API Endpointlar
+## 🔧 API Endpoints
 
 - `POST /api/telegram/webhook` - Telegram webhook endpoint
+- `GET /` - Home page
 
-## 🛠️ Texnik ma'lumotlar
+## 🛠️ Technical Details
 
-### Paketlar
-- `barryvdh/laravel-dompdf` - PDF yaratish
-- Laravel Storage - Fayllarni boshqarish
-- Telegram Bot API - Bot funksiyalari
+### Packages
+- `barryvdh/laravel-dompdf` - PDF generation
+- Laravel Storage - File management
+- Telegram Bot API - Bot functionality
 
-### Fayl tuzilishi
-- Rasm: `storage/app/public/images/{chat_id}/`
-- PDF: `storage/app/public/pdfs/{chat_id}/`
+### File Structure
+- Images: `storage/app/public/images/{chat_id}/`
+- PDFs: `storage/app/public/pdfs/{chat_id}/`
 
-### Xavfsizlik
-- HTTPS majburiy
-- Bot tokenini himoya qiling
-- Webhook URL ni faqat o'zingiz bilgan holda saqlang
+### Security
+- HTTPS required
+- Protect bot token
+- Keep webhook URL private
 
-## 🧪 Test qilish
+## 🧪 Testing
 
-1. Botga `/start` yuboring
-2. Rasm yuklang
-3. "Tayyor" tugmasini bosing
-4. PDF fayl oling
+1. Send `/start` to bot
+2. Upload image
+3. Press "Ready" button
+4. Get PDF file
 
-## 📊 Log va monitoring
+## 📊 Logging and Monitoring
 
-Barcha bot faoliyati `storage/logs/laravel.log` faylida saqlanadi:
-- Webhook qabul qilindi
-- Rasm yuklandi
-- PDF yaratildi
-- Xatoliklar
+All bot activity is saved in `storage/logs/laravel.log`:
+- Webhook received
+- Image uploaded
+- PDF generated
+- Errors
 
-## 🐛 Muammolarni hal qilish
+## 🐛 Troubleshooting
 
-### Bot javob bermaydi
-- Webhook to'g'ri o'rnatilganini tekshiring
-- HTTPS domain ishlatayotganingizni tekshiring
-- Bot token to'g'ri ekanligini tekshiring
+### Bot not responding
+- Check webhook is set correctly
+- Verify HTTPS domain
+- Check bot token
 
-### PDF yaratilmaydi
-- Storage link yaratilganini tekshiring
-- DomPDF paketi o'rnatilganini tekshiring
-- Rasm fayllar saqlanganini tekshiring
+### PDF not generating
+- Verify storage link created
+- Check DomPDF package installed
+- Verify image files saved
 
-### Fayllar saqlanmaydi
-- Storage disk public ga ulanganini tekshiring
-- Fayl huquqlarini tekshiring
+### Files not saving
+- Check storage disk public linked
+- Check file permissions
 
-## 📞 Yordam
+## 📞 Support
 
-Muammolar bo'lsa:
-1. Laravel log fayllarini tekshiring
-2. Telegram Bot API xatoliklarini tekshiring
-3. Server sozlamalarini tekshiring
+If you have issues:
+1. Check Laravel log files
+2. Check Telegram Bot API errors
+3. Check server configuration
 
-## 👨‍💻 Muallif
+## 👨‍💻 Author
 
 **Azizbek Hakimov** ([@azizbek-web-dev](https://github.com/azizbek-web-dev))
 
-- 🌐 Telegram: [@azizbek_web_dev](https://t.me/azizbek_web_dev)
+- 🌐 Telegram: [@Aziz_codes](https://t.me/Aziz_codes)
 - 💻 GitHub: [azizbek-web-dev](https://github.com/azizbek-web-dev)
-- 📧 Email: azizbek.web.dev@gmail.com
+- 📧 Email: [azizxakimov45@gmail.com](mailto:azizxakimov45@gmail.com)
 
-## 📄 Litsenziya
+## 📄 License
 
-Bu loyiha [MIT License](LICENSE) ostida tarqatiladi.
+This project is licensed under [MIT License](LICENSE).
 
 ```
 MIT License
@@ -208,10 +210,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-## 🌟 Yordam berish
+## 🌟 Support the Project
 
-Agar bu loyiha foydali bo'lsa, ⭐ yulduzcha qo'yishni unutmang!
+If this project is helpful, don't forget to give it a ⭐ star!
 
 ---
 
-**Eslatma:** Bu bot faqat o'quv maqsadida yaratilgan. Production da ishlatishdan oldin xavfsizlik sozlamalarini tekshiring.
+**Note:** This bot is created for educational purposes. Check security settings before using in production.
