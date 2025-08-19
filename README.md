@@ -1,102 +1,128 @@
-# 🤖 IMG TO PDF Bot
+# IMG TO PDF Bot
 
-A Telegram bot for converting images to PDF. Built with Laravel and DomPDF.
+<div align="center">
+
+![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
+![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)
+![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)
+
+**A powerful Telegram bot for converting images to PDF with multi-language support**
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+
+</div>
+
+---
 
 ## ✨ Features
 
-- 📸 **Image Upload** - Single or multiple images
-- 📄 **PDF Generation** - Beautiful and organized PDFs
-- 🎯 **Inline Keyboard** - Convenient buttons
-- 🧹 **Auto Cleanup** - Files automatically deleted
-- 📱 **Telegram Bot API** - Real-time operation
-- 🔒 **Security** - HTTPS and webhook
+- **Image Upload** - Single or multiple images support
+- **PDF Generation** - Beautiful and organized PDFs using DomPDF
+- **Inline Keyboard** - Convenient interactive buttons
+- **Auto Cleanup** - Files automatically deleted after processing
+- **Multi-language** - English, Russian, and Uzbek support
+- **Real-time** - Instant PDF generation and delivery
+- **Secure** - HTTPS and webhook protection
 
-## 🚀 Installation
+## 🚀 Quick Start
 
-### Requirements
-- PHP 8.2+
-- Laravel 12.0+
+### Prerequisites
+
+- PHP 8.2 or higher
+- Laravel 12.0 or higher
 - Composer
-- HTTPS domain (for webhook)
+- HTTPS domain (required for webhook)
 - Telegram Bot Token
 
-### 1. Clone the project
+### Installation
+
 ```bash
+# Clone the repository
 git clone <repository-url>
 cd img-to-pdf/laravel
-```
 
-### 2. Install dependencies
-```bash
+# Install dependencies
 composer install
-npm install
-npm run build
+npm install && npm run build
+
+# Environment setup
+cp .env.example .env
+# Edit .env file with your bot token
 ```
 
-### 3. Configure .env file
+### Configuration
+
 ```env
 APP_NAME="IMG TO PDF Bot"
 APP_ENV=production
-APP_KEY=base64:your_key_here
 APP_DEBUG=false
 APP_URL=https://your-domain.com
 
-LOG_CHANNEL=stack
-LOG_LEVEL=error
-
-DB_CONNECTION=sqlite
-DB_DATABASE=database/database.sqlite
-
-FILESYSTEM_DISK=public
-
-# Telegram Bot
 TELEGRAM_BOT_TOKEN=your_bot_token_here
 ```
 
-### 4. Laravel setup
+### Setup Commands
+
 ```bash
+# Generate application key
 php artisan key:generate
+
+# Create storage link
+php artisan storage:link
+
+# Cache configuration
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
-php artisan storage:link
 ```
 
-### 5. Server configuration
-```bash
-# Configure Nginx or Apache
-# Install HTTPS certificate
-# Set webhook URL
-```
+## 🤖 Bot Setup
 
-## 🤖 Create Telegram Bot
+### 1. Create Telegram Bot
 
-### 1. Create bot with @BotFather
+Contact [@BotFather](https://t.me/BotFather) and create a new bot:
+
 ```
 /newbot
 Bot name: IMG TO PDF Bot
-Bot username: img_to_pdf_bot
+Bot username: your_bot_username
 ```
 
-### 2. Set webhook
+### 2. Set Webhook
+
+Replace `YOUR_TOKEN` and `your-domain.com` with your actual values:
+
 ```
 https://api.telegram.org/botYOUR_TOKEN/setWebhook?url=https://your-domain.com/api/telegram/webhook
 ```
 
-## 📱 Bot Usage
+### 3. Test the Bot
 
-### Main functions
-1. **Upload Image** - Send image to bot
-2. **Press Ready Button** - To create PDF
-3. **Get PDF** - Bot sends you PDF file
-4. **Auto Cleanup** - Files are deleted
+Send `/start` to your bot to begin using it.
 
-### Buttons
-- 📖 **About Bot** - Bot information
-- 📋 **Usage Guide** - How to use
-- 🔄 **New Image** - Upload new image
-- ✅ **Ready** - Create PDF
-- 🏠 **Home** - Main menu
+## 📱 Usage Guide
+
+### Basic Workflow
+
+1. **Start the bot** - Send `/start` command
+2. **Upload images** - Send one or more images to the bot
+3. **Generate PDF** - Click the "Ready" button
+4. **Receive PDF** - Bot sends the generated PDF file
+5. **Auto cleanup** - Files are automatically deleted
+
+### Available Commands
+
+- `/start` - Welcome message and main menu
+- **About Bot** - Bot information and features
+- **Usage Guide** - Step-by-step instructions
+- **Language** - Change bot language
+- **New Image** - Upload additional images
+
+### Supported Languages
+
+- 🇺🇸 **English** - Default language
+- 🇷🇺 **Русский** - Russian language
+- 🇺🇿 **O'zbekcha** - Uzbek language
 
 ## 🏗️ Project Structure
 
@@ -105,86 +131,121 @@ laravel/
 ├── app/Http/Controllers/
 │   └── TelegramBotController.php    # Main bot logic
 ├── resources/views/
-│   ├── home.blade.php               # Home page
+│   ├── home.blade.php               # Multi-language home page
 │   └── pdf/
 │       └── images.blade.php         # PDF template
 ├── routes/
-│   └── web.php                      # Webhook route
+│   └── web.php                      # Webhook routes
 ├── bootstrap/
-│   └── app.php                      # Middleware config
+│   └── app.php                      # Middleware configuration
 └── README.md                         # This file
 ```
 
 ## 🔧 API Endpoints
 
-- `POST /api/telegram/webhook` - Telegram webhook endpoint
-- `GET /` - Home page
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/telegram/webhook` | Telegram webhook endpoint |
+| `GET` | `/` | Multi-language home page |
 
 ## 🛠️ Technical Details
 
-### Packages
-- `barryvdh/laravel-dompdf` - PDF generation
-- Laravel Storage - File management
-- Telegram Bot API - Bot functionality
+### Core Packages
 
-### File Structure
-- Images: `storage/app/public/images/{chat_id}/`
-- PDFs: `storage/app/public/pdfs/{chat_id}/`
+- **Laravel Framework** - Web application framework
+- **DomPDF** - HTML to PDF conversion
+- **Telegram Bot API** - Bot functionality
 
-### Security
-- HTTPS required
-- Protect bot token
-- Keep webhook URL private
+### File Management
 
-## 🧪 Testing
+- **Images**: `storage/app/public/images/{chat_id}/`
+- **PDFs**: `storage/app/public/pdfs/{chat_id}/`
+- **User Settings**: `storage/app/public/users/{chat_id}/`
 
-1. Send `/start` to bot
-2. Upload image
-3. Press "Ready" button
-4. Get PDF file
+### Security Features
 
-## 📊 Logging and Monitoring
+- HTTPS requirement for webhooks
+- CSRF protection (webhook excluded)
+- Secure file handling
+- Automatic cleanup
 
-All bot activity is saved in `storage/logs/laravel.log`:
-- Webhook received
-- Image uploaded
-- PDF generated
-- Errors
+## 📊 Logging & Monitoring
+
+All bot activities are logged to `storage/logs/laravel.log`:
+
+- Webhook requests and responses
+- Image uploads and processing
+- PDF generation status
+- Error tracking and debugging
+- User interaction logs
 
 ## 🐛 Troubleshooting
 
-### Bot not responding
-- Check webhook is set correctly
-- Verify HTTPS domain
-- Check bot token
+### Common Issues
 
-### PDF not generating
-- Verify storage link created
-- Check DomPDF package installed
-- Verify image files saved
+| Problem | Solution |
+|---------|----------|
+| Bot not responding | Check webhook URL and HTTPS |
+| PDF not generating | Verify DomPDF installation |
+| Files not saving | Check storage permissions |
+| Language not changing | Clear browser cache |
 
-### Files not saving
-- Check storage disk public linked
-- Check file permissions
+### Debug Steps
 
-## 📞 Support
+1. Check Laravel logs: `tail -f storage/logs/laravel.log`
+2. Verify webhook status via Telegram API
+3. Test storage permissions and links
+4. Confirm environment variables
 
-If you have issues:
-1. Check Laravel log files
-2. Check Telegram Bot API errors
-3. Check server configuration
+## 🌟 Features in Detail
 
-## 👨‍💻 Author
+### Multi-language Support
 
-**Azizbek Hakimov** ([@azizbek-web-dev](https://github.com/azizbek-web-dev))
+The bot automatically detects and remembers user language preferences, providing a localized experience for users worldwide.
 
-- 🌐 Telegram: [@Aziz_codes](https://t.me/Aziz_codes)
-- 💻 GitHub: [azizbek-web-dev](https://github.com/azizbek-web-dev)
-- 📧 Email: [azizxakimov45@gmail.com](mailto:azizxakimov45@gmail.com)
+### Smart File Handling
+
+- Automatic image optimization
+- Efficient PDF generation
+- Secure file storage
+- Intelligent cleanup system
+
+### User Experience
+
+- Intuitive inline keyboards
+- Real-time status updates
+- Error handling with helpful messages
+- Responsive design
+
+## 📈 Performance
+
+- **Fast Processing** - Optimized image handling
+- **Memory Efficient** - Streamlined PDF generation
+- **Scalable** - Handles multiple users simultaneously
+- **Reliable** - Robust error handling and recovery
+
+## 🤝 Contributing
+
+We welcome contributions! Please feel free to submit issues and pull requests.
+
+### Development Setup
+
+```bash
+# Clone and setup
+git clone <repository-url>
+cd img-to-pdf/laravel
+composer install
+
+# Development server
+php artisan serve
+
+# Testing
+php artisan test
+```
 
 ## 📄 License
 
-This project is licensed under [MIT License](LICENSE).
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ```
 MIT License
@@ -210,10 +271,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-## 🌟 Support the Project
+## 👨‍💻 Author
 
-If this project is helpful, don't forget to give it a ⭐ star!
+<div align="center">
+
+**Azizbek Hakimov**
+
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/azizbek-web-dev)
+[![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/Aziz_codes)
+[![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:azizxakimov45@gmail.com)
+
+</div>
 
 ---
 
-**Note:** This bot is created for educational purposes. Check security settings before using in production.
+<div align="center">
+
+**If this project helps you, please give it a ⭐ star!**
+
+Made with ❤️ by [Azizbek Hakimov](https://github.com/azizbek-web-dev)
+
+</div>
