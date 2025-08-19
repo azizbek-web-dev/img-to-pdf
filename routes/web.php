@@ -8,5 +8,5 @@ Route::get('/', function () {
     return view('home');
 });
 
-// Telegram Bot Webhook - asosiy endpoint
-Route::post('/api/telegram/webhook', [TelegramBotController::class, 'webhook']);
+// Telegram Bot Webhook - CSRF dan himoyalangan
+Route::post('/api/telegram/webhook', [TelegramBotController::class, 'webhook'])->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class]);
